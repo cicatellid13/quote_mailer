@@ -25,7 +25,7 @@ def update_quote_data(
 
 def get_quote_data_by_author(
     author: str,
-    used_quotes: Optional[dict] = None,
+    used_quotes: Optional[list] = None,
     mock_client: Optional[Any] = None,
 ) -> QuoteDbSchema:
     with mongo_quote_ctx(mock_client=mock_client) as mongo:

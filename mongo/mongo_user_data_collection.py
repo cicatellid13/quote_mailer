@@ -47,16 +47,18 @@ class MongoUserDataCollection(MongoBaseClient):
             upsert=True,
         )
 
-    def get_user_document(self, document: UserDbSchema):
+    def get_user_document(self, username):
         if self._collection is None:
             raise ValueError(f"collection not set int {type(self)}")
 
-        if not isinstance(document, UserDbSchema):
-            raise ValueError(
-                f"document must be of type UserDbSchema, received {type(document)}"
-            )
+        document = self.find_one_document(
+            data_filter={"username": username}, projection={"_id": False}
+        )
+        return UserDbSchema(**document)
 
-        return self._collection.find
+        # return self.find_one_document(
+        #     data_filter={"username": username}, projection={"_id": False}
+        # )
 
     def update_user_quotes_sent(self, update_data: UserDbAddUsedQuote):
         if self._collection is None:
@@ -68,7 +70,7 @@ class MongoUserDataCollection(MongoBaseClient):
                 "$addToSet": {
                     f"quotes_sent.{update_data.author}": update_data.quote
                 }
-            },  # append the single quote
+            },
             return_document=ReturnDocument.AFTER,
         )
 
