@@ -42,6 +42,7 @@ class MongoUserDataCollection(MongoBaseClient):
                 "$set": {
                     "number": document.number,
                     "quotes_sent": document.quotes_sent,
+                    "author_choice": document.author_choice,
                 }
             },
             upsert=True,
@@ -55,10 +56,6 @@ class MongoUserDataCollection(MongoBaseClient):
             data_filter={"username": username}, projection={"_id": False}
         )
         return UserDbSchema(**document)
-
-        # return self.find_one_document(
-        #     data_filter={"username": username}, projection={"_id": False}
-        # )
 
     def update_user_quotes_sent(self, update_data: UserDbAddUsedQuote):
         if self._collection is None:
