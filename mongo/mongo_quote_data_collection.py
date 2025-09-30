@@ -45,13 +45,21 @@ class MongoQuoteDataCollection(MongoBaseClient):
 
         return self._collection.update_one(
             {"author": document.author},
-            {"$set": {"quotes": document.quotes}},
+            {
+                "$set": {
+                    "quotes": document.quotes,
+                    "author": document.author.title(),
+                }
+            },
             upsert=True,
+            collation={"locale": "en", "strength": 2},
         )
 
     def get_quote_data_by_author(
         self, author: str, used_quotes: Optional[list] = None
     ) -> QuoteDbSchema:
+
+        collation = {"locale": "en", "strength": 2}
 
         if used_quotes:
             pipeline = [
@@ -71,22 +79,17 @@ class MongoQuoteDataCollection(MongoBaseClient):
                     }
                 },
             ]
-            cursor = self._collection.aggregate(pipeline=pipeline)
 
-            try:
-                document = next(cursor)
-            except StopIteration:
-                return None
-
-            if next(cursor, None) is not None:
-                raise ValueError(
-                    f"Multiple documents found for author '{author}'"
-                )
+            document = self.find_one_document(
+                pipeline=pipeline, collation=collation
+            )
 
         else:
-            document = self.find_one_document(data_filter={"author": author})
+            document = self.find_one_document(
+                data_filter={"author": author}, collation=collation
+            )
 
-        if document is None:
+        if not document:
             return None
 
         return QuoteDbSchema(**document)

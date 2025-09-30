@@ -1,7 +1,6 @@
 from typing import Optional, Any
 from mongo.mongo_user_data_collection import mongo_users_ctx
 from util.schemas import UserDbSchema, UserDbAddUsedQuote
-from util.data_scrapers.tomlin_quotes import get_quotes
 
 
 def update_user_data(
@@ -18,7 +17,7 @@ def update_user_data(
 
 def add_quote_to_user(
     document: UserDbAddUsedQuote, mock_client: Optional[Any] = None
-):
+) -> bool:
     with mongo_users_ctx(mock_client=mock_client) as mongo:
         response = mongo.update_user_quotes_sent(document)
 

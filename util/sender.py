@@ -4,17 +4,14 @@ from dotenv import load_dotenv
 from email.message import EmailMessage
 import requests
 
-
 load_dotenv()
-
-# TODO add carrier hash map
 
 
 def send_text_smtp(to_num: int, msg: str) -> bool:
     email = os.environ.get("gmail_from")
 
     msg_obj = EmailMessage()
-    msg_obj.set_content(msg[:160])
+    msg_obj.set_content(msg)
     msg_obj["Subject"] = ""
     msg_obj["From"] = email
     msg_obj["To"] = f"{to_num}@vtext.com"

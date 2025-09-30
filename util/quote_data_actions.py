@@ -1,11 +1,11 @@
 from typing import Optional, Any
 from mongo.mongo_quote_data_collection import mongo_quote_ctx
 from util.schemas import QuoteDbSchema
-from util.data_scrapers.tomlin_quotes import get_quotes
+from util.data_scrapers.brainy_quotes import get_quotes_by_author
 
 
-def get_quote_data() -> QuoteDbSchema:
-    data = get_quotes()
+def get_quote_data(author: str) -> QuoteDbSchema:
+    data = get_quotes_by_author(author)
     cleaned = [d.replace(data["author"], "").strip() for d in data["quotes"]]
 
     return QuoteDbSchema(author=data["author"], quotes=cleaned)
@@ -34,9 +34,9 @@ def get_quote_data_by_author(
         return response
 
 
-def get_and_load_data() -> bool:
-    data_to_load = get_quote_data()
+def get_and_load_data(author: str) -> bool:
+    data_to_load = get_quote_data(author)
 
-    if update_quote_data(data_to_load):
+    if len(data_to_load.quotes) > 0 and update_quote_data(data_to_load):
         return True
     return False

@@ -37,17 +37,17 @@ class MongoBaseClient:
     def get_collection(self, name: str):
         return self.get_database().get_collection(name)
 
-    # def aggregate_pipeline(self, pipeline: dict):
-    #     return self._collection.aggrega
-
     def find_one_document(
         self,
         data_filter: Optional[dict] = None,
         projection: Optional[dict] = None,
+        collation: Optional[dict] = None,
     ) -> dict:
         if self._collection is None:
             raise ValueError(f"collection not set in {type(self)}")
-        return self._collection.find_one(data_filter, projection)
+        return self._collection.find_one(
+            data_filter, projection, collation=collation
+        )
 
     def execute_ping_test(self):
         try:
