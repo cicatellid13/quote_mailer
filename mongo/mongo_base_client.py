@@ -2,7 +2,6 @@
 A base client for connecting to a MongoDB database.
 """
 
-from urllib.parse import quote_plus
 from typing import Optional, Any
 import certifi
 from pymongo import MongoClient as _MongoClient
@@ -46,12 +45,19 @@ class MongoBaseClient:
         if self._collection is None:
             raise ValueError(f"collection not set in {type(self)}")
         return self._collection.find_one(
-            data_filter, projection, collation=collation
+            data_filter, projection=projection, collation=collation
         )
+
+    def find_by_one_by_aggregation(
+        self, pipeline: list, collation: Optional[dict] = None
+    ) -> dict:
+        document_cursor = self._collection.aggregate(
+            pipeline, collation=collation
+        )
+        return next(document_cursor, None)
 
     def execute_ping_test(self):
         try:
-            print("Successfully connected to MongoDB!")
             return self._client.admin.command("ping")
         except Exception as e:
             raise ConnectionError(f"Failed to connect to MongoDB: {e}")

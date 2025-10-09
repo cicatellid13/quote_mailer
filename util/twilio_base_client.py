@@ -21,7 +21,7 @@ class TwilioClient:
             message = self._client.messages.create(
                 body=body,
                 from_=self._from_number,
-                to=self._set_number_country_code(to_number),
+                to=self._set_us_country_code(to_number),
             )
             return message.sid
         except Exception as e:
@@ -29,9 +29,9 @@ class TwilioClient:
 
             raise RuntimeError(f"Error sending message to {to_number}") from e
 
-    def _set_number_country_code(self, number: str) -> str:
+    def _set_us_country_code(self, number: str) -> str:
         if number.startswith("1"):
-            return f"+{number}"
+            return number
         return f"+1{number}"
 
     def get_message_status(self, msg_sid: str) -> str:

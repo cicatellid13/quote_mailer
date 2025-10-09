@@ -4,6 +4,7 @@ import random
 from util.schemas import UserDbAddUsedQuote
 from util.sender import send_text_smtp
 from util.twilio_base_client import TwilioClient
+import logging
 
 while True:
     username = input("username: ")
@@ -23,16 +24,17 @@ while True:
     quote = data.quotes[choice_idx]
     msg = f"{data.quotes[choice_idx]}\n\n -{data.author}"
 
-    sent = send_text_smtp(user.number, msg)
-    # sent = sender.send_sms(user.number, msg)
+    # sent = send_text_smtp(user.number, msg)
+    sent = sender.send_sms(user.number, msg)
     print(sent)
+    print("msg sent: \n\n", msg, "\n")
 
     user_update = UserDbAddUsedQuote(
         username=user.username, author=user.author_choice, quote=quote
     )
 
     if add_quote_to_user(user_update):
-        print("user updated")
+        print(user.username, "updated")
     else:
-        print("issue updating user")
+        print("issue updating user", user.username)
     break

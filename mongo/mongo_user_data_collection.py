@@ -9,7 +9,6 @@ from typing import Optional, Any, ContextManager
 from contextlib import contextmanager
 from mongo.mongo_base_client import MongoBaseClient
 from pymongo.collection import InsertOneResult
-from dotenv import load_dotenv
 from pymongo import ReturnDocument
 
 from util.schemas import UserDbSchema, UserDbAddUsedQuote

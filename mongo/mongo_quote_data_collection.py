@@ -80,9 +80,7 @@ class MongoQuoteDataCollection(MongoBaseClient):
                 },
             ]
 
-            document = self.find_one_document(
-                pipeline=pipeline, collation=collation
-            )
+            document = self.find_by_one_by_aggregation(pipeline=pipeline)
 
         else:
             document = self.find_one_document(
