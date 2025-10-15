@@ -48,7 +48,7 @@ class MongoBaseClient:
             data_filter, projection=projection, collation=collation
         )
 
-    def find_by_one_by_aggregation(
+    def find_one_by_aggregation(
         self, pipeline: list, collation: Optional[dict] = None
     ) -> dict:
         document_cursor = self._collection.aggregate(

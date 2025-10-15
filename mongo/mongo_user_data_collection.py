@@ -11,7 +11,7 @@ from mongo.mongo_base_client import MongoBaseClient
 from pymongo.collection import InsertOneResult
 from pymongo import ReturnDocument
 
-from util.schemas import UserDbSchema, UserDbAddUsedQuote
+from util.schemas import UserDbSchema, UserDbAddUsedQuote, UserDbUpdate
 
 
 class MongoUserDataCollection(MongoBaseClient):
@@ -74,6 +74,15 @@ class MongoUserDataCollection(MongoBaseClient):
             raise ValueError(f"User '{update_data.username}' not found")
 
         return updated_document
+
+    def update_user_data(self, update_data: UserDbUpdate):
+        if self._collection is None:
+            raise ValueError(f"collection not set in {type(self)}")
+
+        return self._collection.update_one(
+            {"username": update_data.username},
+            {"$set": update_data.model_dump(exclude_none=True)},
+        )
 
 
 @contextmanager

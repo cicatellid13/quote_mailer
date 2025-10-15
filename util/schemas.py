@@ -8,7 +8,9 @@ class TwilioSmsSchema(BaseModel):
 
 class UserDbSchema(BaseModel):
     username: str = Field(..., description="unique username")
-    author_choice: str = Field(..., description="current author choice")
+    author_choice: str = Field(
+        ..., description="author choice, 'first name, last name' "
+    )
     number: str = Field(..., description="user phone number")
     quotes_sent: dict[str, list[str]] = Field(
         default_factory=dict,
@@ -25,3 +27,11 @@ class UserDbAddUsedQuote(BaseModel):
 class QuoteDbSchema(BaseModel):
     author: str = Field(..., description="author of the quotes")
     quotes: list[str] = Field(..., description="list of quotes")
+
+
+class UserDbUpdate(BaseModel):
+    username: str = Field(..., description="username")
+    author_choice: str = Field(
+        default=None, description="author choice, 'first name, last name' "
+    )
+    number: str = Field(default=None, description="user phone number")

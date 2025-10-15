@@ -24,10 +24,10 @@ while True:
     quote = data.quotes[choice_idx]
     msg = f"{data.quotes[choice_idx]}\n\n -{data.author}"
 
-    # sent = send_text_smtp(user.number, msg)
-    sent = sender.send_sms(user.number, msg)
+    sent = send_text_smtp(user.number, msg)
+    # sent = sender.send_sms(user.number, msg)
     print(sent)
-    print("msg sent: \n\n", msg, "\n")
+    print("msg sent: \n", msg, "\n")
 
     user_update = UserDbAddUsedQuote(
         username=user.username, author=user.author_choice, quote=quote

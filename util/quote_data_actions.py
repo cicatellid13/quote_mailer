@@ -3,6 +3,8 @@ from mongo.mongo_quote_data_collection import mongo_quote_ctx
 from util.schemas import QuoteDbSchema
 from util.data_scrapers.brainy_quotes import get_quotes_by_author
 
+# TODO add logic to get current authors in mongo, if user selects author that doesnt exist, try get_and_load_data()
+
 
 def get_quote_data(author: str) -> QuoteDbSchema:
     data = get_quotes_by_author(author)
